@@ -34,9 +34,9 @@ TODO: 版本对关系，好像 5.6 之前的，得用旧版驱动。之后的，
 ```
 
 注意到这里添加依赖的scope是runtime。
-1. 因为编译Java程序并不需要MySQL的这个jar包，只有在运行期才需要使用。把runtime改成compile，也能正常编译，
-2. 但是在IDE里写程序的时候，会多出来一大堆类似com.mysql.jdbc.Connection这样的类，非常容易与Java标准库的JDBC接口混淆
-3. 所以没有设置为compile。
+因为编译Java程序并不需要MySQL的这个jar包，只有在运行期才需要使用。把runtime改成compile 也能正常编译，
+但是在IDE里写程序的时候会多出来一大堆类似com.mysql.jdbc.Connection这样的类，
+非常容易与Java标准库的JDBC接口混淆，所以没有设置为compile。
 ### 2. 示例代码: 获取/关闭连接
 
 使用 jdbc，步骤如下
@@ -166,6 +166,31 @@ public void query2(){
 使用PreparedStatement和Statement稍有不同，必须首先调用setObject()设置每个占位符?的值，最后获取的仍然是ResultSet对象。
 
 另外注意到从结果集读取列时，使用String类型的列名比索引要易读，而且不易出错。
+## 理论知识
+### SQL类型
+- 类 JDBCType       Defines the constants that are used to identify generic SQL types, called JDBC types.
+- 接口 SQLType
+- Types             The class that defines the constants that are used to identify generic SQL types, called JDBC types.
+
+```java
+public enum JDBCType extends Enum<JDBCType> implements SQLType
+
+public class Types  extends Object
+```
+这两个类是 JDBC 4.2 新增的内容。旧版以及现在的 jdbc 规范，对数据类型的
+> Standard mappings for SQL types to classes and interfaces in the Java programming language
+- Array interface -- mapping for SQL ARRAY
+- Blob interface -- mapping for SQL BLOB
+- Clob interface -- mapping for SQL CLOB
+- Date class -- mapping for SQL DATE
+- NClob interface -- mapping for SQL NCLOB
+- Ref interface -- mapping for SQL REF
+- RowId interface -- mapping for SQL ROWID
+- Struct interface -- mapping for SQL STRUCT
+- SQLXML interface -- mapping for SQL XML
+- Time class -- mapping for SQL TIME
+- Timestamp class -- mapping for SQL TIMESTAMP
+- Types class -- provides constants for SQL types
 
 ## 附：参考资料
 Java 官网教材，针对JDK8，英文的。
